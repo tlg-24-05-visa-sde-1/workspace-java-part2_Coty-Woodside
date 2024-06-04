@@ -19,9 +19,6 @@ class DuckRacer {
         rewards.add(reward);
     }
 
-
-
-
     //accessor methods
     public int getId() {
         return id;
