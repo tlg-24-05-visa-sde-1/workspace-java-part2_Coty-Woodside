@@ -48,24 +48,36 @@ public class Television {
     }
 
     @Override
-    public int hashCode() {
-
-        return Objects.hash(getBrand(), getVolume());
-
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
+        Television other = (Television) obj;
+        return getVolume() == other.getVolume() && Objects.equals(this.getBrand(), other.getBrand());
     }
-
 
     @Override
-    public boolean equals(Object obj) {
-        boolean result = false;
-        if (obj instanceof Television) {
-            Television other = (Television) obj;
-
-            result = Objects.equals(this.getBrand(), other.getBrand()) &&
-                    this.getVolume() == other.getVolume();
-        }
-        return result;
+    public int hashCode() {
+        return Objects.hash(getBrand(), getVolume());
     }
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(getBrand(), getVolume());
+//
+//    }
+//
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        boolean result = false;
+//        if (this.getClass() == obj.getClass()) {
+//            Television other = (Television) obj;
+//
+//            result = Objects.equals(this.getBrand(), other.getBrand()) &&
+//                    this.getVolume() == other.getVolume();
+//        }
+//        return result;
+//    }
 
 
     @Override
