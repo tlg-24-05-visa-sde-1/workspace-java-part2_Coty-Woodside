@@ -114,12 +114,11 @@ public class InMemoryCatalog implements Catalog {
         Collection<MusicItem> result = new ArrayList<>();
 
         for (MusicItem item : catalogData) {
-            if (item.getTitle().equals(item.getArtist())) {
+            if (item.getArtist().equals(item.getTitle())) {
                 result.add(item);
             }
         }
         return result;
-
     }
 
     /**
