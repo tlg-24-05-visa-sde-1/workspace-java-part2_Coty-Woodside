@@ -1,6 +1,8 @@
 package com.javatunes.personnel;
 
 import static org.junit.Assert.*;
+
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
@@ -51,15 +53,27 @@ public class EmployeeFactoryTest {
      * assertEquals(SalariedEmployee.class, emp.getClass())
      */
     @Test
-    public void testCreateEmployeeSalaried() {
-        // TODO
+    public void createEmployee_shouldReturnSalariedEmployee_typeSE() {
+        Employee emp = EmployeeFactory.createEmployee(seMap);
+
+        //verify that 'emp' really is referenced to a SalariedEmployee object
+        assertTrue(emp instanceof SalariedEmployee);
+
+        assertEquals(SalariedEmployee.class, emp.getClass());
+        assertEquals("Jackie", emp.getName());
+        assertEquals(Date.valueOf("1990-08-24"), emp.getHireDate());
+
+       //downcast emp to more specific reference type SalariedEmployee so we can call type-specific getSalary()
+        SalariedEmployee semp = (SalariedEmployee) emp;
+        assertEquals(50_000.00, semp.getSalary(), .001);
+
     }
 
     /**
      * TASK: verify that passing heMap into your factory returns a HourlyEmployee, with all properties set.
      */
     @Test
-    public void testCreateEmployeeHourly() {
+    public void createEmployee_shouldReturnHourlyEmployee_typeHE() {
         // TODO
     }
 
@@ -67,8 +81,9 @@ public class EmployeeFactoryTest {
      * TASK: verify that passing a map with an invalid "type" value results in IllegalArgumentException.
      * The only valid values for "type" are "HE" or "SE".
      */
-    @Test
-    public void testCreateEmployeeInvalidTypeThrowsIllegalArgumentException() {
-        // TODO
+    @Test(expected=IllegalArgumentException.class)
+    public void createEmployee_shouldThrowIllegalArgumentException_invalidType() {
+        seMap.put("type", "INVALID-TYPE");
+        EmployeeFactory.createEmployee(seMap);
     }
 }
