@@ -16,6 +16,8 @@ public class MediaPlayer extends Product {
 
     @Override
     public Double getPrice() {
+
         return 50.0;
+
     }
 }
