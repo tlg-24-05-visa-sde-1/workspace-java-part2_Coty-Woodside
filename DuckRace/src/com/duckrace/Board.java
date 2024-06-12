@@ -1,6 +1,6 @@
 package com.duckrace;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -38,9 +38,32 @@ import java.util.*;
  *   17       17    Dom        1    DEBIT_CARD
  */
 
-public class Board {
+public class Board implements Serializable{
+    private static final String DATA_FILE_PATH = "data/board.dat";
+    private static final String STUDENT_ID_FILE_PATH = "data/student-ids.csv";
+    public static Board getInstance() {
+        Board board = null;
+
+        if (Files.exists(Path.of(DATA_FILE_PATH))) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(DATA_FILE_PATH))) {
+            board = (Board) in.readObject();
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            board = new Board();
+        }
+        return board;
+    }
+
     private final Map<Integer, String> studentIdMap = loadStudentIDMap();
     private final Map<Integer, DuckRacer> racerMap = new TreeMap<>();
+
+    //prevent instantiation from outside
+    private Board() {
+    }
 
     public void update(int id, Reward reward) {
         DuckRacer racer = null;
@@ -52,6 +75,17 @@ public class Board {
             racerMap.put(id, racer);
         }
         racer.win(reward);
+        save();
+    }
+
+//writes to the data file
+    private void save() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE_PATH))) {
+        out.writeObject(this); //write to me, the board object (to the file)
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     //testing purposes only
@@ -82,7 +116,7 @@ public class Board {
         Map<Integer, String> map = new HashMap<>();
 
         try {
-            List<String> lines = Files.readAllLines(Path.of("conf/student-ids.csv"));
+            List<String> lines = Files.readAllLines(Path.of(STUDENT_ID_FILE_PATH));
             for (String line : lines) {
                 String[] tokens = line.split(",");
                 Integer id = Integer.valueOf(tokens[0]);

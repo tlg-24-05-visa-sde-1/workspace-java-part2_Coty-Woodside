@@ -7,7 +7,7 @@ import java.util.Scanner;
 import static com.duckrace.Reward.*;
 
 public class DuckRaceApp {
-    private Board board = new Board();
+    private Board board = Board.getInstance();
     private Scanner scanner = new Scanner(System.in);
 
     public void execute() {
