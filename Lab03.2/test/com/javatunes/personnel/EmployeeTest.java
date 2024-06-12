@@ -8,13 +8,21 @@ import java.sql.Date;
 public class EmployeeTest {
     private Employee emp1;
     private Employee emp2;
+
     @Before
     public void setUp() {
-        emp1 = new SalariedEmployee("Coty", Date.valueOf("2000-01-01"));
-        emp2 = new SalariedEmployee("Coty", Date.valueOf("2000-01-01"));
+       // emp1 = new DummyEmployee("Coty", Date.valueOf("2000-01-01"));
+       // emp2 = new DummyEmployee("Coty", Date.valueOf("2000-01-01"));
+        emp1 = getEmployee();
+        emp2 = getEmployee();
     }
 
-
+    private static Employee getEmployee() {
+        return new Employee("Coty", Date.valueOf("2000-01-01")) {
+            public double pay() {return 0;}
+            public double payTaxes() {return 0;}
+        };
+    }
 
     @Test
     public void equals_shouldReturnFalse_differentName_sameHireDate(){
@@ -36,4 +44,28 @@ public class EmployeeTest {
         assertEquals(emp1, emp2);  //this does .equals() check
         assertTrue(emp1.equals(emp2));  // alternative assertion
     }
+
+    // NAMED MEMBER-LEVEL INNER CLASSES
+    private class DummyEmployee extends Employee {
+
+        public DummyEmployee() {
+        }
+
+        public DummyEmployee(String name, Date hireDate) {
+            super(name, hireDate);
+        }
+
+        @Override
+        public double pay() {
+            return 0;
+        }
+
+        @Override
+        public double payTaxes() {
+            return 0;
+        }
+    }
+
+
+
 }
